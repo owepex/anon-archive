@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ANON ARCHIVE — Полный гайд по анонимности</title>
+    <meta name="description" content="Единый гайд: анонимность, VPN Mullvad, Tor, Tails, социнженерия, RAT, вирусы, Windows, Android, iOS, macOS.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000000;
+            background-image: radial-gradient(circle at 25% 20%, #0b1114 2%, #000000 98%);
+            color: #f0f0f0;
+            font-family: 'Inter', 'Segoe UI', 'Roboto', system-ui, 'Courier New', monospace;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 48px;
+            height: 48px;
+            background: #0f0f13;
+            border: 1px solid #2e7d64;
+            border-radius: 12px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+        .menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+        }
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -280px;
+            width: 270px;
+            height: 100%;
+            background: #0a0a0e;
+            border-right: 1px solid #2e7d64;
+            z-index: 1001;
+            transition: left 0.3s ease;
+            padding: 70px 15px 30px;
+            overflow-y: auto;
+        }
+        .side-menu.open { left: 0; }
+        .side-menu a {
+            display: block;
+            color: #ccc;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .side-menu a:hover {
+            background: #1a2a25;
+            color: #fff;
+            border-left: 2px solid #2e7d64;
+        }
+        .close-menu {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 26px;
+            cursor: pointer;
+            color: #aaa;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.active { display: block; }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        .hero {
+            text-align: center;
+            padding: 2rem 0 1.5rem;
+            border-bottom: 1px solid rgba(46,125,100,0.4);
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #a0f0df);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero p {
+            margin-top: 0.8rem;
+            color: #aaa;
+            font-family: monospace;
+        }
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin: 2.2rem 0 1rem 0;
+            border-left: 4px solid #2e7d64;
+            padding-left: 1rem;
+            scroll-margin-top: 70px;
+        }
+        .card {
+            background: rgba(12, 12, 16, 0.85);
+            border: 1px solid rgba(46, 125, 100, 0.3);
+            border-radius: 24px;
+            padding: 1.3rem;
+            margin-bottom: 1.3rem;
+        }
+        .badge {
+            background: #1f3e36;
+            color: #ccffee;
+            font-size: 0.65rem;
+            border-radius: 30px;
+            padding: 0.2rem 0.8rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        .warning-red {
+            border-left: 4px solid #ff5e4a;
+            background: #1f0e0c;
+            padding: 0.7rem;
+            border-radius: 14px;
+            margin: 0.8rem 0;
+            font-size: 0.9rem;
+        }
+        .code-block {
+            background: #0a0c0e;
+            padding: 0.8rem;
+            border-radius: 14px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            border: 1px solid #2a2a2a;
+            margin: 0.8rem 0;
+        }
+        .list-styled {
+            padding-left: 1.3rem;
+            margin: 0.6rem 0;
+        }
+        .two-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+        footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            padding: 1.5rem 0;
+            color: #6b6b6b;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 2rem; }
+            .section-title { font-size: 1.4rem; }
+            .container { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu-btn" id="menuBtn"><span></span><span></span><span></span></div>
+<div class="side-menu" id="sideMenu">
+    <div class="close-menu" id="closeMenu">&times;</div>
+    <h4 style="color:#2e7d64; margin-bottom:20px;">📖 Гайд: анонимность</h4>
+    <a href="#vpn">VPN (Mullvad)</a>
+    <a href="#tor">Tor Browser</a>
+    <a href="#browsers">Анонимные браузеры</a>
+    <a href="#tails">Tails OS</a>
+    <a href="#veracrypt">VeraCrypt + метаданные</a>
+    <a href="#opsec">ОПСЕК (поведение)</a>
+    <a href="#hardware">Аппаратная анонимность</a>
+    <a href="#windows">Windows</a>
+    <a href="#android">Android</a>
+    <a href="#ios">iOS / iPhone</a>
+    <a href="#macos">macOS</a>
+    <a href="#wifi">Публичные WiFi</a>
+    <a href="#onion">Onion-ссылки</a>
+    <a href="#social">Социальная инженерия</a>
+    <a href="#rat">RAT (удалённый доступ)</a>
+    <a href="#viruses">Вирусы (майнеры, трояны, винлокеры)</a>
+    <a href="#checklist">Чек-лист</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<div class="container">
+    <div class="hero">
+        <h1>◉ ANON ARCHIVE</h1>
+        <p>Единый гайд по анонимности — от VPN до защиты от вирусов</p>
+    </div>
+
+    <div class="card">
+        <div class="badge">НАЧАЛО</div>
+        <p><strong>Этот гайд — всё в одном.</strong> Никакой воды, только рабочие методы: как настроить анонимность на Windows, Android, iPhone, Mac, как пользоваться Tor и Tails, как не попасться на социальную инженерию, что делать с RAT и вирусами. Читайте по порядку или через меню слева.</p>
+    </div>
+
+    <!-- VPN -->
+    <div id="vpn" class="section-title">▸ VPN: Mullvad — лучший выбор</div>
+    <div class="card">
+        <p><strong>Mullvad</strong> — нет логов, регистрация по номеру счёта, оплата наличными или картой-подарком. Kill switch, WireGuard, защита от утечек DNS/WebRTC.</p>
+        <div class="warning-red">🔥 Бесплатные VPN — опасны: логи, продажа данных, утечки. Никогда не используйте их для анонимности.</div>
+    </div>
+
+    <!-- Tor -->
+    <div id="tor" class="section-title">▸ Tor Browser</div>
+    <div class="card">
+        <p>Скачивайте только с <strong>torproject.org</strong>. Уровень безопасности — «Безопасный». Используйте мосты (obfs4, Snowflake), если Tor заблокирован.</p>
+        <div class="warning-red">❌ Не разворачивайте на весь экран, не входите в личные аккаунты (Google, соцсети), не ставьте расширения.</div>
+    </div>
+
+    <!-- Браузеры -->
+    <div id="browsers" class="section-title">▸ Анонимные браузеры</div>
+    <div class="two-columns">
+        <div class="card"><strong>LibreWolf</strong> (⭐⭐⭐⭐⭐) — максимальная приватность из коробки, автоочистка.</div>
+        <div class="card"><strong>Brave</strong> (⭐⭐⭐⭐) — Shields + режим Tor в приватных окнах.</div>
+        <div class="card"><strong>Firefox Hardened</strong> — about:config + arkenfox user.js.</div>
+        <div class="card"><strong>Chrome / Edge / Safari</strong> — ❌ не использовать для анонимности.</div>
+    </div>
+
+    <!-- Tails -->
+    <div id="tails" class="section-title">▸ Tails OS — лучшая защита</div>
+    <div class="card">
+        <p>Загружается с флешки, не оставляет следов, весь трафик через Tor. Идеально: Tails + публичный WiFi.</p>
+        <div class="code-block">💡 Для высокорисковых операций — только Tails. После выключения ничего не остаётся.</div>
+    </div>
+
+    <!-- VeraCrypt -->
+    <div id="veracrypt" class="section-title">▸ VeraCrypt + очистка метаданных</div>
+    <div class="two-columns">
+        <div class="card"><strong>VeraCrypt</strong> — шифрование диска, скрытые тома.</div>
+        <div class="card"><strong>MAT2 / ExifTool</strong> — удаление EXIF (GPS, модель камеры, автор) из фото и PDF.</div>
+    </div>
+
+    <!-- ОПСЕК -->
+    <div id="opsec" class="section-title">▸ ОПСЕК — поведение</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li>❌ Не использовать старые ники и клички</li>
+            <li>❌ Не смешивать анонимную и реальную личность</li>
+            <li>❌ Не рассказывать о своих инструментах анонимности</li>
+            <li>✅ Создайте легенду, используйте менеджер паролей (Bitwarden/KeePassXC)</li>
+        </ul>
+    </div>
+
+    <!-- Аппаратная -->
+    <div id="hardware" class="section-title">▸ Аппаратная анонимность</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li>Смена MAC-адреса (macchanger, Tails делает это автоматически)</li>
+            <li>Покупка ноутбука и роутера за наличные</li>
+            <li>Отключение Bluetooth, TPM, Intel AMT в BIOS</li>
+        </ul>
+    </div>
+
+    <!-- Windows -->
+    <div id="windows" class="section-title">▸ Настройка Windows (без переустановки)</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li><strong>O&O ShutUp10++</strong> — отключает телеметрию (рекомендованные настройки)</li>
+            <li><strong>WPD</strong> — блокирует IP-адреса Microsoft</li>
+            <li><strong>SimpleWall</strong> — файрвол, разрешайте выход только нужным программам</li>
+            <li>Локальная учётная запись (без Microsoft Account)</li>
+        </ul>
+        <div class="warning-red">После крупных обновлений Windows настройки слетают — применяйте заново.</div>
+    </div>
+
+    <!-- Android -->
+    <div id="android" class="section-title">▸ Android</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li>Лучший вариант: <strong>GrapheneOS</strong> (требует Pixel) или CalyxOS</li>
+            <li>Используйте microG вместо Google Play Services</li>
+            <li>Магазин приложений — F-Droid</li>
+            <li>Отключить геолокацию, Wi-Fi/Bluetooth-сканирование, диагностику</li>
+        </ul>
+    </div>
+
+    <!-- iOS -->
+    <div id="ios" class="section-title">▸ iOS / iPhone</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li><strong>Onion Browser</strong> + Orbot (Tor на iPhone)</li>
+            <li>Отключить аналитику и персонализированную рекламу</li>
+            <li>Не использовать iCloud для важных данных</li>
+            <li>Полной анонимности на iOS нет из-за ограничений Apple</li>
+        </ul>
+    </div>
+
+    <!-- macOS -->
+    <div id="macos" class="section-title">▸ macOS (MacBook)</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li><strong>Little Snitch</strong> — файрвол для контроля трафика</li>
+            <li>Отключить аналитику, Siri, iCloud Drive, Find My Mac</li>
+            <li>Терминал: <code class="code-block" style="display:inline-block; padding:2px 6px;">sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.analyticsd.plist</code></li>
+        </ul>
+    </div>
+
+    <!-- Публичный WiFi -->
+    <div id="wifi" class="section-title">▸ Публичные WiFi</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li>Включайте VPN <strong>ДО</strong> подключения к WiFi</li>
+            <li>Меняйте MAC-адрес перед подключением</li>
+            <li>Не используйте домашний WiFi для анонимных сессий</li>
+        </ul>
+    </div>
+
+    <!-- Onion-ссылки -->
+    <div id="onion" class="section-title">▸ Onion-ссылки и поиск в даркнете</div>
+    <div class="card">
+        <p>Поисковики: Ahmia, Torch, DuckDuckGo .onion. Официальные onion-сайты: Facebook, ProtonMail, NYT, BBC.</p>
+        <div class="warning-red">⚠️ Сравнивайте длинные адреса по буквам — фишеры меняют одну букву.</div>
+    </div>
+
+    <!-- Социальная инженерия -->
+    <div id="social" class="section-title">▸ Социальная инженерия — как не дать себя обмануть</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li>❌ Никогда не диктовать код из СМС или приложения</li>
+            <li>❌ Не переходить по ссылкам из писем и сообщений</li>
+            <li>❌ Не открывать .exe, .scr, .js, .vbs</li>
+            <li>✅ Звонок из банка — положить трубку и перезвонить самому по номеру с карты</li>
+            <li>✅ «Ваш аккаунт взломан» — 99% фишинг. Проверьте вручную через официальный сайт</li>
+        </ul>
+        <div class="warning-red">🔴 Никакой антивирус не защитит от социальной инженерии — только ваша голова.</div>
+    </div>
+
+    <!-- RAT -->
+    <div id="rat" class="section-title">▸ RAT — удалённый доступ (экстренная инструкция)</div>
+    <div class="card">
+        <p><strong>RAT</strong> — вирус, дающий хакеру полный контроль над ПК (веб-камера, файлы, клавиатура).</p>
+        <p><strong>Что делать при заражении:</strong></p>
+        <ol class="list-styled">
+            <li>1. Отключить интернет (выдернуть кабель / отключить WiFi)</li>
+            <li>2. Сохранить важные файлы на чистую флешку</li>
+            <li>3. <strong>Полная переустановка Windows</strong> с удалением всех разделов</li>
+            <li>4. Сменить ВСЕ пароли (с другого устройства)</li>
+            <li>5. Отозвать все активные сессии в аккаунтах</li>
+        </ol>
+        <div class="warning-red">⚠️ Антивирус не гарантирует удаление RAT. Только чистая переустановка.</div>
+    </div>
+
+    <!-- ВИРУСЫ -->
+    <div id="viruses" class="section-title">▸ Вирусы: майнеры, трояны, винлокеры, стилеры</div>
+    
+    <div class="card">
+        <div class="badge">⛏️ МАЙНЕРЫ</div>
+        <p><strong>Как понять:</strong> CPU загружен на 100% в простое, компьютер тормозит и греется. <strong>Лечение:</strong> uBlock Origin (блок майнеров на сайтах), проверка автозагрузки, Malwarebytes.</p>
+    </div>
+    <div class="card">
+        <div class="badge">🎭 ТРОЯНЫ</div>
+        <p><strong>Как понять:</strong> программы, которые вы не ставили, антивирус отключён, необычные соединения. <strong>Защита:</strong> скачивать только с официальных сайтов, проверять файлы на VirusTotal. При заражении — переустановка Windows.</p>
+    </div>
+    <div class="card">
+        <div class="badge">🔒 ВИНЛОКЕРЫ (шифровальщики)</div>
+        <p><strong>Как понять:</strong> все файлы зашифрованы, расширения .locked / .crypt, вымогательство. <strong>До заражения:</strong> бекапы на внешний диск (не подключён постоянно). <strong>После:</strong> ❌ НЕ ПЛАТИТЬ. Отключить ПК от сети, проверить nomoreransom.org (бесплатные дешифраторы).</p>
+        <div class="warning-red">Бекапы — единственное спасение от винлокеров.</div>
+    </div>
+    <div class="card">
+        <div class="badge">🕵️ СТИЛЕРЫ (воровство паролей)</div>
+        <p><strong>Как понять:</strong> аккаунты разбрасывают спам, уведомления о входе с чужих устройств. <strong>Защита:</strong> не хранить пароли в браузере, использовать менеджер паролей (Bitwarden, KeePassXC) + 2FA через аутентификатор (Aegis) или аппаратный ключ.</p>
+    </div>
+
+    <div class="card">
+        <div class="badge">🛡️ Общие правила от любых вирусов</div>
+        <ul class="list-styled">
+            <li>Не запускать .exe/.scr/.js из непроверенных источников</li>
+            <li>Работать под стандартной учётной записью (не администратор)</li>
+            <li>Включить контроль учётных записей (UAC)</li>
+            <li>Для важных задач — Tails OS (вирусы не выживают после перезагрузки)</li>
+        </ul>
+    </div>
+
+    <!-- Чек-лист -->
+    <div id="checklist" class="section-title">▸ Финальный чек-лист анонимности</div>
+    <div class="card">
+        <ul class="list-styled">
+            <li>☐ Mullvad VPN (анонимная оплата)</li>
+            <li>☐ Tor Browser (уровень «Безопасный»)</li>
+            <li>☐ LibreWolf / Brave для повседневного</li>
+            <li>☐ Tails OS на флешке для важных задач</li>
+            <li>☐ O&O ShutUp10 + WPD (Windows)</li>
+            <li>☐ GrapheneOS или microG (Android)</li>
+            <li>☐ Отключена аналитика на iPhone</li>
+            <li>☐ Little Snitch (macOS)</li>
+            <li>☐ Смена MAC перед публичным WiFi</li>
+            <li>☐ Никакого облака (iCloud, Google Drive)</li>
+            <li>☐ Менеджер паролей + 2FA (аппаратный ключ)</li>
+            <li>☐ Бекапы от винлокеров</li>
+            <li>☐ Знание правил социнженерии</li>
+        </ul>
+        <div class="code-block">🔒 Выполнив 80% пунктов — вы анонимнее 99% пользователей.</div>
+    </div>
+
+    <div class="card" style="text-align:center;">
+        <p style="font-style: italic;">«Анонимность — это не один инструмент, а система. VPN + Tor + Tails + поведение + защита от вирусов.»</p>
+    </div>
+
+    <footer>
+        <p>ANON ARCHIVE — единый гайд по анонимности, социнженерии, RAT и вирусам. Без трекеров и аналитики.</p>
+    </footer>
+</div>
+
+<script>
+    const menuBtn = document.getElementById('menuBtn');
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    const closeBtn = document.getElementById('closeMenu');
+    function openMenu() { sideMenu.classList.add('open'); overlay.classList.add('active'); }
+    function closeMenu() { sideMenu.classList.remove('open'); overlay.classList.remove('active'); }
+    menuBtn.addEventListener('click', openMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+    document.querySelectorAll('.side-menu a').forEach(link => link.addEventListener('click', closeMenu));
+</script>
+</body>
+</html>
