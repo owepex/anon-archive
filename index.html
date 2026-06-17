@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ANON ARCHIVE — Полный гайд по анонимности</title>
-    <meta name="description" content="Единый гайд: анонимность, VPN Mullvad, Tor, Tails, социнженерия, RAT, вирусы, Windows, Android, iOS, macOS.">
+    <meta name="description" content="Единый гайд: анонимность, VPN Mullvad, Tor, Tails, социнженерия, RAT, вирусы, Windows, Android, iOS, macOS, приватность, пароли, психология, сценарии угроз.">
     <style>
         * {
             margin: 0;
@@ -137,9 +137,29 @@
             display: inline-block;
             margin-bottom: 0.8rem;
         }
+        .badge-red {
+            background: #4a1a1a;
+            color: #ffbbaa;
+        }
+        .badge-yellow {
+            background: #3a2a1a;
+            color: #ffddaa;
+        }
+        .badge-blue {
+            background: #1a2a3a;
+            color: #aaccee;
+        }
         .warning-red {
             border-left: 4px solid #ff5e4a;
             background: #1f0e0c;
+            padding: 0.7rem;
+            border-radius: 14px;
+            margin: 0.8rem 0;
+            font-size: 0.9rem;
+        }
+        .warning-yellow {
+            border-left: 4px solid #ffaa33;
+            background: #1f1a0c;
             padding: 0.7rem;
             border-radius: 14px;
             margin: 0.8rem 0;
@@ -158,11 +178,48 @@
             padding-left: 1.3rem;
             margin: 0.6rem 0;
         }
+        .list-styled li { margin: 0.4rem 0; }
         .two-columns {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1rem;
             margin: 0.5rem 0;
+        }
+        .three-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+        .tools-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        .tools-table th, .tools-table td {
+            border: 1px solid #2a4a3f;
+            padding: 0.6rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        .tools-table th {
+            background: #0f2a24;
+            color: #ccffee;
+        }
+        .glossary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 0.8rem;
+        }
+        .glossary-item {
+            background: #0a0c0e;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 0.6rem 0.8rem;
+        }
+        .glossary-item strong {
+            color: #8effb2;
         }
         footer {
             margin-top: 2.5rem;
@@ -200,7 +257,18 @@
     <a href="#onion">Onion-ссылки</a>
     <a href="#social">Социальная инженерия</a>
     <a href="#rat">RAT (удалённый доступ)</a>
-    <a href="#viruses">Вирусы (майнеры, трояны, винлокеры)</a>
+    <a href="#viruses">Вирусы</a>
+    <a href="#privacy">Приватность vs анонимность</a>
+    <a href="#passwords">Безопасные пароли</a>
+    <a href="#emergency">Экстренный план</a>
+    <a href="#mistakes">Ошибки новичков</a>
+    <a href="#psychology">Психология анонимности</a>
+    <a href="#tests">Тесты анонимности</a>
+    <a href="#starter">Аварийный набор</a>
+    <a href="#threats">Сценарии угроз</a>
+    <a href="#glossary">Словарь терминов</a>
+    <a href="#hacked">Что делать при взломе аккаунта</a>
+    <a href="#tools">Инструменты</a>
     <a href="#checklist">Чек-лист</a>
 </div>
 <div class="overlay" id="overlay"></div>
@@ -208,29 +276,27 @@
 <div class="container">
     <div class="hero">
         <h1>◉ ANON ARCHIVE</h1>
-        <p>Единый гайд по анонимности — от VPN до защиты от вирусов</p>
+        <p>Единый гайд по анонимности — от VPN до психологии и сценариев угроз</p>
     </div>
 
     <div class="card">
         <div class="badge">НАЧАЛО</div>
-        <p><strong>Этот гайд — всё в одном.</strong> Никакой воды, только рабочие методы: как настроить анонимность на Windows, Android, iPhone, Mac, как пользоваться Tor и Tails, как не попасться на социальную инженерию, что делать с RAT и вирусами. Читайте по порядку или через меню слева.</p>
+        <p><strong>Этот гайд — всё в одном.</strong> Никакой воды, только рабочие методы: как настроить анонимность на Windows, Android, iPhone, Mac, как пользоваться Tor и Tails, как не попасться на социальную инженерию, что делать с RAT и вирусами, а также психология анонимности, тесты, сценарии угроз и словарь терминов. Читайте по порядку или через меню слева.</p>
     </div>
 
-    <!-- VPN -->
+    <!-- ===== ОСНОВНЫЕ РАЗДЕЛЫ ===== -->
     <div id="vpn" class="section-title">▸ VPN: Mullvad — лучший выбор</div>
     <div class="card">
         <p><strong>Mullvad</strong> — нет логов, регистрация по номеру счёта, оплата наличными или картой-подарком. Kill switch, WireGuard, защита от утечек DNS/WebRTC.</p>
         <div class="warning-red">🔥 Бесплатные VPN — опасны: логи, продажа данных, утечки. Никогда не используйте их для анонимности.</div>
     </div>
 
-    <!-- Tor -->
     <div id="tor" class="section-title">▸ Tor Browser</div>
     <div class="card">
         <p>Скачивайте только с <strong>torproject.org</strong>. Уровень безопасности — «Безопасный». Используйте мосты (obfs4, Snowflake), если Tor заблокирован.</p>
         <div class="warning-red">❌ Не разворачивайте на весь экран, не входите в личные аккаунты (Google, соцсети), не ставьте расширения.</div>
     </div>
 
-    <!-- Браузеры -->
     <div id="browsers" class="section-title">▸ Анонимные браузеры</div>
     <div class="two-columns">
         <div class="card"><strong>LibreWolf</strong> (⭐⭐⭐⭐⭐) — максимальная приватность из коробки, автоочистка.</div>
@@ -239,21 +305,18 @@
         <div class="card"><strong>Chrome / Edge / Safari</strong> — ❌ не использовать для анонимности.</div>
     </div>
 
-    <!-- Tails -->
     <div id="tails" class="section-title">▸ Tails OS — лучшая защита</div>
     <div class="card">
         <p>Загружается с флешки, не оставляет следов, весь трафик через Tor. Идеально: Tails + публичный WiFi.</p>
         <div class="code-block">💡 Для высокорисковых операций — только Tails. После выключения ничего не остаётся.</div>
     </div>
 
-    <!-- VeraCrypt -->
     <div id="veracrypt" class="section-title">▸ VeraCrypt + очистка метаданных</div>
     <div class="two-columns">
         <div class="card"><strong>VeraCrypt</strong> — шифрование диска, скрытые тома.</div>
         <div class="card"><strong>MAT2 / ExifTool</strong> — удаление EXIF (GPS, модель камеры, автор) из фото и PDF.</div>
     </div>
 
-    <!-- ОПСЕК -->
     <div id="opsec" class="section-title">▸ ОПСЕК — поведение</div>
     <div class="card">
         <ul class="list-styled">
@@ -264,7 +327,6 @@
         </ul>
     </div>
 
-    <!-- Аппаратная -->
     <div id="hardware" class="section-title">▸ Аппаратная анонимность</div>
     <div class="card">
         <ul class="list-styled">
@@ -274,7 +336,6 @@
         </ul>
     </div>
 
-    <!-- Windows -->
     <div id="windows" class="section-title">▸ Настройка Windows (без переустановки)</div>
     <div class="card">
         <ul class="list-styled">
@@ -286,7 +347,6 @@
         <div class="warning-red">После крупных обновлений Windows настройки слетают — применяйте заново.</div>
     </div>
 
-    <!-- Android -->
     <div id="android" class="section-title">▸ Android</div>
     <div class="card">
         <ul class="list-styled">
@@ -297,7 +357,6 @@
         </ul>
     </div>
 
-    <!-- iOS -->
     <div id="ios" class="section-title">▸ iOS / iPhone</div>
     <div class="card">
         <ul class="list-styled">
@@ -308,17 +367,15 @@
         </ul>
     </div>
 
-    <!-- macOS -->
     <div id="macos" class="section-title">▸ macOS (MacBook)</div>
     <div class="card">
         <ul class="list-styled">
             <li><strong>Little Snitch</strong> — файрвол для контроля трафика</li>
             <li>Отключить аналитику, Siri, iCloud Drive, Find My Mac</li>
-            <li>Терминал: <code class="code-block" style="display:inline-block; padding:2px 6px;">sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.analyticsd.plist</code></li>
+            <li>Терминал: <code style="background:#0a0c0e; padding:2px 6px;">sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.analyticsd.plist</code></li>
         </ul>
     </div>
 
-    <!-- Публичный WiFi -->
     <div id="wifi" class="section-title">▸ Публичные WiFi</div>
     <div class="card">
         <ul class="list-styled">
@@ -328,14 +385,12 @@
         </ul>
     </div>
 
-    <!-- Onion-ссылки -->
     <div id="onion" class="section-title">▸ Onion-ссылки и поиск в даркнете</div>
     <div class="card">
         <p>Поисковики: Ahmia, Torch, DuckDuckGo .onion. Официальные onion-сайты: Facebook, ProtonMail, NYT, BBC.</p>
         <div class="warning-red">⚠️ Сравнивайте длинные адреса по буквам — фишеры меняют одну букву.</div>
     </div>
 
-    <!-- Социальная инженерия -->
     <div id="social" class="section-title">▸ Социальная инженерия — как не дать себя обмануть</div>
     <div class="card">
         <ul class="list-styled">
@@ -348,7 +403,6 @@
         <div class="warning-red">🔴 Никакой антивирус не защитит от социальной инженерии — только ваша голова.</div>
     </div>
 
-    <!-- RAT -->
     <div id="rat" class="section-title">▸ RAT — удалённый доступ (экстренная инструкция)</div>
     <div class="card">
         <p><strong>RAT</strong> — вирус, дающий хакеру полный контроль над ПК (веб-камера, файлы, клавиатура).</p>
@@ -363,7 +417,6 @@
         <div class="warning-red">⚠️ Антивирус не гарантирует удаление RAT. Только чистая переустановка.</div>
     </div>
 
-    <!-- ВИРУСЫ -->
     <div id="viruses" class="section-title">▸ Вирусы: майнеры, трояны, винлокеры, стилеры</div>
     
     <div class="card">
@@ -384,57 +437,104 @@
         <p><strong>Как понять:</strong> аккаунты разбрасывают спам, уведомления о входе с чужих устройств. <strong>Защита:</strong> не хранить пароли в браузере, использовать менеджер паролей (Bitwarden, KeePassXC) + 2FA через аутентификатор (Aegis) или аппаратный ключ.</p>
     </div>
 
+    <!-- ===== НОВЫЕ РАЗДЕЛЫ ===== -->
+    
+    <div id="privacy" class="section-title">▸ Приватность vs анонимность</div>
     <div class="card">
-        <div class="badge">🛡️ Общие правила от любых вирусов</div>
-        <ul class="list-styled">
-            <li>Не запускать .exe/.scr/.js из непроверенных источников</li>
-            <li>Работать под стандартной учётной записью (не администратор)</li>
-            <li>Включить контроль учётных записей (UAC)</li>
-            <li>Для важных задач — Tails OS (вирусы не выживают после перезагрузки)</li>
-        </ul>
+        <p>Многие путают эти понятия. Вот чёткое различие:</p>
+        <table class="tools-table">
+            <tr><th>Понятие</th><th>Что значит</th><th>Пример</th></tr>
+            <tr><td><strong>Приватность</strong></td><td>Ваши данные не видны другим, но вы не скрываете свою личность</td><td>DuckDuckGo, VPN (сайты видят ваш IP, но не трекеры)</td></tr>
+            <tr><td><strong>Анонимность</strong></td><td>Вашу личность нельзя установить даже при доступе к данным</td><td>Tor, Tails, публичный WiFi + VPN + смена MAC</td></tr>
+        </table>
+        <div class="code-block">📌 Вывод: приватность — скрыть данные, анонимность — скрыть личность. Для полной анонимности нужны оба компонента.</div>
     </div>
 
-    <!-- Чек-лист -->
-    <div id="checklist" class="section-title">▸ Финальный чек-лист анонимности</div>
+    <div id="passwords" class="section-title">▸ Как создать безопасный пароль и где его хранить</div>
+    <div class="card">
+        <p>Слабый пароль рушит любую анонимность. Даже с Tor и VPN.</p>
+        <ul class="list-styled">
+            <li><strong>Минимальные требования:</strong> длина 16+ символов, не словарные, уникальные для каждого сервиса</li>
+            <li><strong>Как создать:</strong> фраза из 4-5 случайных слов + цифры + спецсимволы. Пример: <code>кошка-лампа-гвоздь-93!@</code></li>
+            <li><strong>Менеджеры паролей:</strong>
+                <ul class="list-styled">
+                    <li>Bitwarden — облачный, с шифрованием, бесплатный, открытый код</li>
+                    <li>KeePassXC — локальный, для параноиков, база хранится на вашем ПК</li>
+                </ul>
+            </li>
+            <li><strong>Чего НЕ делать:</strong> хранить пароли в браузере (Chrome/Edge хранят в открытом виде), использовать один пароль везде, записывать на стикер к монитору</li>
+        </ul>
+        <div class="warning-red">⚠️ Включите двухфакторную аутентификацию (2FA) везде, где можно. Лучше через аутентификатор (Aegis, Google Authenticator), чем через SMS.</div>
+    </div>
+
+    <div id="emergency" class="section-title">▸ Что делать, если провалилась анонимность (экстренный план)</div>
+    <div class="card">
+        <p>Тихая паника — враг. Действуйте по плану:</p>
+        <ol class="list-styled">
+            <li><strong>❌ Не паниковать</strong> — ошибки на эмоциях усугубят ситуацию</li>
+            <li><strong>❌ Не признаваться никому</strong> (даже в анонимном чате — могут записывать)</li>
+            <li><strong>✅ Уничтожить носитель</strong> — флешку с Tails, SIM-карту, временный ноутбук (физически)</li>
+            <li><strong>✅ Сменить все пароли</strong> с другого, чистого устройства (начиная с почты)</li>
+            <li><strong>✅ Отозвать все активные сессии</strong> в аккаунтах («выйти из всех устройств»)</li>
+            <li><strong>✅ Создать новую легенду</strong> и никогда не пересекать со старой</li>
+        </ol>
+        <div class="code-block">💡 Если вас нашли — не ищите виноватых, просто создайте новую личность с нуля. Анонимность не терпит компромиссов.</div>
+    </div>
+
+    <div id="mistakes" class="section-title">▸ Ошибки новичков, которые убивают анонимность</div>
     <div class="card">
         <ul class="list-styled">
-            <li>☐ Mullvad VPN (анонимная оплата)</li>
-            <li>☐ Tor Browser (уровень «Безопасный»)</li>
-            <li>☐ LibreWolf / Brave для повседневного</li>
-            <li>☐ Tails OS на флешке для важных задач</li>
-            <li>☐ O&O ShutUp10 + WPD (Windows)</li>
-            <li>☐ GrapheneOS или microG (Android)</li>
-            <li>☐ Отключена аналитика на iPhone</li>
-            <li>☐ Little Snitch (macOS)</li>
-            <li>☐ Смена MAC перед публичным WiFi</li>
-            <li>☐ Никакого облака (iCloud, Google Drive)</li>
-            <li>☐ Менеджер паролей + 2FA (аппаратный ключ)</li>
-            <li>☐ Бекапы от винлокеров</li>
-            <li>☐ Знание правил социнженерии</li>
+            <li><strong>❌ Зашёл в свой Telegram/почту через Tor</strong> — привязал личность к анонимному сеансу</li>
+            <li><strong>❌ Не изменил MAC-адрес</strong> — владелец WiFi вас запомнил</li>
+            <li><strong>❌ Включил Tor, потом выключил VPN на секунду</strong> — утечка IP через фоновые запросы</li>
+            <li><strong>❌ Сказал другу в голосовом чате «я сижу через Tor»</strong> — теперь знают, кто вы</li>
+            <li><strong>❌ Использует один никнейм везде</strong> — по нему находят в соцсетях</li>
+            <li><strong>❌ Не отключил WebRTC в браузере</strong> — сайты видят ваш реальный IP даже через VPN</li>
+            <li><strong>❌ Работает из дома, а не из публичного WiFi</strong> — провайдер знает адрес</li>
+            <li><strong>❌ Игнорирует бекапы</strong> — винлокер уничтожит все данные</li>
         </ul>
-        <div class="code-block">🔒 Выполнив 80% пунктов — вы анонимнее 99% пользователей.</div>
+        <div class="warning-red">🔴 Эти ошибки совершают 90% новичков. Первое правило: никогда не смешивать анонимную и реальную личность.</div>
     </div>
 
-    <div class="card" style="text-align:center;">
-        <p style="font-style: italic;">«Анонимность — это не один инструмент, а система. VPN + Tor + Tails + поведение + защита от вирусов.»</p>
+    <!-- ===== РАЗДЕЛЫ НОВОЙ ВОЛНЫ ===== -->
+
+    <div id="psychology" class="section-title">▸ Психология анонимности: как не спалить себя случайно</div>
+    <div class="card">
+        <p>Даже с идеальным софтом, поведение может вас выдать. Вот что выдаёт личность:</p>
+        <ul class="list-styled">
+            <li><strong>⏰ Тайминг:</strong> если выходишь в сеть всегда в одно время — тебя можно связать</li>
+            <li><strong>✍️ Стиль письма:</strong> уникальные фразы, частота ошибок, длина предложений</li>
+            <li><strong>🖱️ Привычки:</strong> как переходишь по ссылкам, куда кликаешь, какие жесты используешь</li>
+            <li><strong>🗣️ Голос:</strong> даже через голосовой чат можно узнать по тембру, акценту, манере речи</li>
+        </ul>
+        <div class="warning-yellow">
+            ✅ <strong>Решение:</strong> хаотичный график, меняй стиль письма (коротко/длинно), используй автоисправление по-разному, избегай голосовых звонков в анонимной среде.
+        </div>
+        <div class="code-block">🧠 Помни: анонимность — это не только софт, это поведение. Твои привычки выдают тебя не хуже IP-адреса.</div>
     </div>
 
-    <footer>
-        <p>ANON ARCHIVE — единый гайд по анонимности, социнженерии, RAT и вирусам. Без трекеров и аналитики.</p>
-    </footer>
-</div>
+    <div id="tests" class="section-title">▸ Как проверить, что твоя анонимность работает</div>
+    <div class="card">
+        <p>Практические тесты, которые показывают, не утек ли ты:</p>
+        <table class="tools-table">
+            <tr><th>Тест</th><th>Ссылка</th><th>Что проверяет</th></tr>
+            <tr><td><strong>IP-тест</strong></td><td>ipleak.net</td><td>Не утек ли твой реальный IP</td></tr>
+            <tr><td><strong>DNS-тест</strong></td><td>dnsleaktest.com</td><td>Не утекают ли DNS-запросы</td></tr>
+            <tr><td><strong>WebRTC-тест</strong></td><td>browserleaks.com/webrtc</td><td>Не светит ли WebRTC твой IP</td></tr>
+            <tr><td><strong>Tor-тест</strong></td><td>check.torproject.org</td><td>Правильно ли настроен Tor</td></tr>
+            <tr><td><strong>Fingerprint-тест</strong></td><td>amiunique.org</td><td>Насколько уникален твой цифровой отпечаток</td></tr>
+        </table>
+        <div class="warning-yellow">📌 Проверяй себя регулярно, особенно после смены настроек или устройств.</div>
+    </div>
 
-<script>
-    const menuBtn = document.getElementById('menuBtn');
-    const sideMenu = document.getElementById('sideMenu');
-    const overlay = document.getElementById('overlay');
-    const closeBtn = document.getElementById('closeMenu');
-    function openMenu() { sideMenu.classList.add('open'); overlay.classList.add('active'); }
-    function closeMenu() { sideMenu.classList.remove('open'); overlay.classList.remove('active'); }
-    menuBtn.addEventListener('click', openMenu);
-    closeBtn.addEventListener('click', closeMenu);
-    overlay.addEventListener('click', closeMenu);
-    document.querySelectorAll('.side-menu a').forEach(link => link.addEventListener('click', closeMenu));
-</script>
-</body>
-</html>
+    <div id="starter" class="section-title">▸ Аварийный набор: минимальный софт для старта</div>
+    <div class="card">
+        <p>Если нужно с нуля настроить анонимность за 15 минут:</p>
+        <div class="three-columns">
+            <div class="card" style="margin:0;"><strong>🪟 Windows</strong><br>O&O ShutUp10 + Mullvad + LibreWolf</div>
+            <div class="card" style="margin:0;"><strong>🤖 Android</strong><br>GrapheneOS (или отключить Google)</div>
+            <div class="card" style="margin:0;"><strong>📱 iOS</strong><br>Onion Browser + выключить всё лишнее</div>
+            <div class="card" style="margin:0;"><strong>🍏 Mac</strong><br>Little Snitch + отключить аналитику</div>
+            <div class="card" style="margin:0;"><strong>💻 Для всего</strong><br>Mullvad VPN + Tor Browser</div>
+        </div>
+        <div class="code-block">⚡ Этот набор даёт 80% защиты за минимальное время. Остальное — настраивай по мере необходимости.</
