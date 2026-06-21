@@ -3,109 +3,1019 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ANON ARCHIVE — обновление</title>
+    <title>ANON ARCHIVE v2.0 — Полный гайд по анонимности</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
             background: #0a0a0f;
-            background-image: radial-gradient(ellipse at 20% 30%, #0f1a1a 0%, #000000 80%);
-            color: #f0f0f0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background-image: radial-gradient(ellipse at 10% 20%, #0a1a12 0%, #000000 90%), repeating-linear-gradient(0deg, rgba(0, 255, 136, 0.02) 0px, rgba(0, 255, 136, 0.02) 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, rgba(0, 255, 136, 0.02) 0px, rgba(0, 255, 136, 0.02) 1px, transparent 1px, transparent 40px);
+            color: #e0e8e0;
+            font-family: 'Roboto Mono', monospace;
+            line-height: 1.7;
             min-height: 100vh;
+            transition: background 0.3s ease;
+        }
+        body.light {
+            background: #e8f0ec;
+            background-image: radial-gradient(ellipse at 10% 20%, #d0e8dc 0%, #e8f0ec 90%), repeating-linear-gradient(0deg, rgba(0, 100, 60, 0.03) 0px, rgba(0, 100, 60, 0.03) 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, rgba(0, 100, 60, 0.03) 0px, rgba(0, 100, 60, 0.03) 1px, transparent 1px, transparent 40px);
+            color: #1a2a22;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0f; }
+        body.light ::-webkit-scrollbar-track { background: #e8f0ec; }
+        ::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00cc77; }
+
+        .menu-btn {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            width: 52px;
+            height: 52px;
+            background: rgba(10, 10, 15, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            z-index: 1000;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 5px;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.08);
+        }
+        body.light .menu-btn { background: rgba(230, 240, 235, 0.92); border-color: rgba(0, 100, 60, 0.3); }
+        .menu-btn:hover { border-color: #00ff88; box-shadow: 0 0 50px rgba(0, 255, 136, 0.15); transform: scale(1.03); }
+        .menu-btn span { display: block; width: 24px; height: 2.5px; background: #00ff88; border-radius: 2px; transition: all 0.3s ease; }
+        body.light .menu-btn span { background: #00663d; }
+        .menu-btn.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-btn.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .menu-btn.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -340px;
+            width: 320px;
+            height: 100%;
+            background: rgba(8, 8, 12, 0.97);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(0, 255, 136, 0.15);
+            z-index: 1001;
+            transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 80px 24px 40px;
+            overflow-y: auto;
+            box-shadow: 4px 0 60px rgba(0, 0, 0, 0.7);
+        }
+        body.light .side-menu { background: rgba(235, 245, 240, 0.97); border-color: rgba(0, 100, 60, 0.15); }
+        .side-menu.open { left: 0; }
+        .side-menu .menu-title { font-size: 1.2rem; font-weight: 700; font-family: 'Orbitron', sans-serif; color: #00ff88; letter-spacing: 1px; margin-bottom: 28px; padding-bottom: 12px; border-bottom: 1px solid rgba(0, 255, 136, 0.15); text-transform: uppercase; }
+        body.light .side-menu .menu-title { color: #00663d; border-color: rgba(0, 100, 60, 0.15); }
+        .side-menu a { display: block; color: #8899aa; text-decoration: none; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; transition: all 0.2s ease; border-left: 2px solid transparent; margin-bottom: 2px; font-family: 'Roboto Mono', monospace; }
+        body.light .side-menu a { color: #445544; }
+        .side-menu a:hover { background: rgba(0, 255, 136, 0.06); color: #00ff88; border-left-color: #00ff88; padding-left: 20px; }
+        body.light .side-menu a:hover { background: rgba(0, 100, 60, 0.06); color: #00663d; }
+        .side-menu .close-menu { position: absolute; top: 18px; right: 22px; font-size: 28px; cursor: pointer; color: #00ff88; transition: 0.2s; background: none; border: none; padding: 8px; }
+        .side-menu .close-menu:hover { color: #00cc77; transform: rotate(90deg); }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+        .overlay.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.8rem; animation: fadeInUp 0.8s ease; }
+
+        .hero {
             text-align: center;
-            padding: 2rem;
+            padding: 2.8rem 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.08);
+            margin-bottom: 2.5rem;
+            background: radial-gradient(ellipse at 50% 100%, rgba(0, 255, 136, 0.04) 0%, transparent 70%);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
         }
-        .container {
-            max-width: 700px;
-            animation: fadeInUp 0.8s ease;
-        }
-        .logo {
-            font-size: 4rem;
+        .hero::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, #00ff88, transparent); opacity: 0.3; }
+        .hero h1 { font-size: 3.4rem; font-weight: 900; font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, #ffffff, #00ff88); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: 2px; text-transform: uppercase; }
+        body.light .hero h1 { background: linear-gradient(135deg, #003322, #00aa66); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .hero p { margin-top: 1rem; color: #8899aa; font-size: 1.05rem; font-weight: 300; letter-spacing: 1px; }
+        body.light .hero p { color: #556655; }
+        .hero .badge-v2 { margin-top: 1rem; display: inline-block; background: rgba(0, 255, 136, 0.1); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 6px; padding: 0.3rem 1.2rem; font-size: 0.6rem; font-weight: 700; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+        body.light .hero .badge-v2 { background: rgba(0, 100, 60, 0.08); color: #00663d; border-color: rgba(0, 100, 60, 0.2); }
+
+        .section-title {
+            font-size: 1.8rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #ffffff 30%, #7dd5c0 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -1px;
-            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            margin: 2.6rem 0 1.2rem 0;
+            border-left: 3px solid #00ff88;
+            padding-left: 1.2rem;
+            scroll-margin-top: 90px;
+            color: #e0e8e0;
+            letter-spacing: 1px;
         }
-        .icon {
-            font-size: 5rem;
-            margin-bottom: 1.2rem;
-            display: block;
-        }
-        h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            color: #e8edf5;
-        }
-        .subtitle {
-            font-size: 1.1rem;
-            color: #8899bb;
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-        }
-        .status-box {
-            background: rgba(14, 20, 40, 0.6);
-            border: 1px solid rgba(46, 125, 100, 0.15);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin: 2rem 0;
+        body.light .section-title { color: #1a2a22; }
+        .section-title.gold { border-left-color: #ffaa33; }
+        .section-title .number { color: #00ff88; margin-right: 8px; font-size: 0.9rem; }
+        body.light .section-title .number { color: #00663d; }
+
+        .card {
+            background: rgba(8, 12, 10, 0.6);
             backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 255, 136, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            animation: cardAppear 0.6s ease forwards;
+            position: relative;
         }
-        .status-box .label {
-            font-size: 0.65rem;
+        body.light .card { background: rgba(235, 245, 240, 0.7); border-color: rgba(0, 100, 60, 0.08); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, #00ff88, transparent); opacity: 0.2; }
+        body.light .card::before { background: linear-gradient(90deg, transparent, #00663d, transparent); }
+        .card:hover { border-color: rgba(0, 255, 136, 0.25); background: rgba(12, 18, 14, 0.7); transform: translateY(-3px); box-shadow: 0 12px 48px rgba(0, 255, 136, 0.06); }
+        body.light .card:hover { border-color: rgba(0, 100, 60, 0.25); background: rgba(240, 248, 244, 0.8); }
+        .card.red-border { border-left: 3px solid #ff4455; }
+        .card.gold-border { border-left: 3px solid #ffaa33; }
+        .card.blue-border { border-left: 3px solid #33aaff; }
+
+        .badge {
+            background: rgba(0, 255, 136, 0.06);
+            color: #00ff88;
+            font-size: 0.6rem;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 4px;
+            padding: 0.2rem 1rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+            border: 1px solid rgba(0, 255, 136, 0.1);
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #7dd5c0;
-            font-weight: 600;
         }
-        .status-box p {
-            margin-top: 0.5rem;
-            font-size: 0.95rem;
-            color: #a0b0c0;
+        body.light .badge { background: rgba(0, 100, 60, 0.06); color: #00663d; border-color: rgba(0, 100, 60, 0.1); }
+        .badge.gold { background: rgba(255, 170, 51, 0.08); color: #ffaa33; border-color: rgba(255, 170, 51, 0.15); }
+        .badge.red { background: rgba(255, 68, 85, 0.08); color: #ff4455; border-color: rgba(255, 68, 85, 0.15); }
+        .badge.blue { background: rgba(51, 170, 255, 0.08); color: #33aaff; border-color: rgba(51, 170, 255, 0.15); }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.9rem 1rem;
+            border-radius: 8px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 255, 136, 0.06);
+            margin: 0.8rem 0;
+            overflow-x: auto;
+            color: #a0c0b0;
         }
+        body.light .code-block { background: rgba(0, 0, 0, 0.04); color: #334433; border-color: rgba(0, 100, 60, 0.06); }
+        .code-block .green { color: #00ff88; }
+        body.light .code-block .green { color: #00663d; }
+        .code-block .red { color: #ff4455; }
+        .code-block .yellow { color: #ffaa33; }
+        .code-block .blue { color: #33aaff; }
+
+        .list-styled { padding-left: 1.4rem; margin: 0.6rem 0; }
+        .list-styled li { margin: 0.4rem 0; color: #b0c0b0; }
+        body.light .list-styled li { color: #334433; }
+        .list-styled li strong { color: #00ff88; }
+        body.light .list-styled li strong { color: #00663d; }
+
+        .two-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 0.5rem 0; }
+        .two-columns .card { margin-bottom: 0; }
+
+        .tools-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+        .tools-table th, .tools-table td { border: 1px solid rgba(0, 255, 136, 0.06); padding: 0.6rem 0.8rem; text-align: left; vertical-align: top; }
+        body.light .tools-table th, body.light .tools-table td { border-color: rgba(0, 100, 60, 0.08); }
+        .tools-table th { background: rgba(0, 255, 136, 0.04); color: #00ff88; font-weight: 700; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        body.light .tools-table th { background: rgba(0, 100, 60, 0.04); color: #00663d; }
+        .tools-table code { background: rgba(0, 0, 0, 0.3); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.8rem; color: #a0c0b0; }
+        body.light .tools-table code { background: rgba(0, 0, 0, 0.04); color: #334433; }
+        .tools-table a { color: #00ff88; text-decoration: none; }
+        body.light .tools-table a { color: #00663d; }
+        .tools-table a:hover { text-decoration: underline; }
+
+        .vpn-comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+        .vpn-comparison th, .vpn-comparison td { border: 1px solid rgba(0, 255, 136, 0.06); padding: 0.6rem 0.8rem; text-align: left; vertical-align: top; }
+        body.light .vpn-comparison th, body.light .vpn-comparison td { border-color: rgba(0, 100, 60, 0.08); }
+        .vpn-comparison th { background: rgba(0, 255, 136, 0.04); color: #00ff88; font-weight: 700; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+        body.light .vpn-comparison th { background: rgba(0, 100, 60, 0.04); color: #00663d; }
+        .vpn-comparison td { text-align: center; }
+        .vpn-comparison .best { color: #00ff88; font-weight: 700; }
+        body.light .vpn-comparison .best { color: #00663d; }
+
+        .warning-red { border-left: 3px solid #ff4455; background: rgba(255, 68, 85, 0.04); padding: 0.8rem 1rem; border-radius: 8px; margin: 0.8rem 0; font-size: 0.9rem; color: #d0a0a0; }
+        body.light .warning-red { color: #883333; background: rgba(255, 68, 85, 0.04); }
+        .warning-gold { border-left: 3px solid #ffaa33; background: rgba(255, 170, 51, 0.04); padding: 0.8rem 1rem; border-radius: 8px; margin: 0.8rem 0; font-size: 0.9rem; color: #d0b080; }
+        body.light .warning-gold { color: #886633; background: rgba(255, 170, 51, 0.04); }
+
+        .checklist { background: rgba(0, 255, 136, 0.02); border-radius: 12px; padding: 1.5rem; margin: 2rem 0; border: 1px solid rgba(0, 255, 136, 0.06); }
+        body.light .checklist { background: rgba(0, 100, 60, 0.02); border-color: rgba(0, 100, 60, 0.06); }
+
+        .to-top-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            background: rgba(0, 255, 136, 0.15);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: none;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.06);
+            font-family: 'Orbitron', sans-serif;
+        }
+        body.light .to-top-btn { background: rgba(0, 100, 60, 0.1); color: #00663d; border-color: rgba(0, 100, 60, 0.15); }
+        .to-top-btn:hover { background: rgba(0, 255, 136, 0.25); border-color: #00ff88; transform: scale(1.05); }
+        body.light .to-top-btn:hover { background: rgba(0, 100, 60, 0.15); }
+
+        .theme-toggle-wrap { text-align: center; margin: 0.5rem 0 2rem; }
+        .theme-toggle-wrap button { background: rgba(0, 255, 136, 0.06); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.1); border-radius: 40px; padding: 8px 20px; cursor: pointer; font-size: 0.8rem; transition: 0.2s; backdrop-filter: blur(4px); font-family: 'Roboto Mono', monospace; }
+        body.light .theme-toggle-wrap button { background: rgba(0, 100, 60, 0.06); color: #00663d; border-color: rgba(0, 100, 60, 0.1); }
+        .theme-toggle-wrap button:hover { background: rgba(0, 255, 136, 0.12); }
+        body.light .theme-toggle-wrap button:hover { background: rgba(0, 100, 60, 0.12); }
+
         .footer {
-            margin-top: 2.5rem;
-            font-size: 0.75rem;
+            margin-top: 3rem;
+            text-align: center;
+            padding: 2rem 0;
             color: #445566;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(0, 255, 136, 0.04);
+            font-family: 'Roboto Mono', monospace;
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        body.light .footer { color: #778877; border-color: rgba(0, 100, 60, 0.04); }
+        .footer a { color: #00ff88; text-decoration: none; transition: 0.2s; }
+        body.light .footer a { color: #00663d; }
+        .footer a:hover { color: #00cc77; text-decoration: underline; }
+        .footer .developer { margin-top: 0.5rem; color: #334455; font-size: 0.7rem; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        body.light .footer .developer { color: #667766; }
+
+        .interactive-box { background: rgba(0, 255, 136, 0.02); border: 1px solid rgba(0, 255, 136, 0.06); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        body.light .interactive-box { background: rgba(0, 100, 60, 0.02); border-color: rgba(0, 100, 60, 0.06); }
+        .interactive-box .btn { background: rgba(0, 255, 136, 0.08); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.15); border-radius: 8px; padding: 8px 20px; cursor: pointer; font-size: 0.8rem; transition: 0.2s; font-family: 'Roboto Mono', monospace; }
+        body.light .interactive-box .btn { background: rgba(0, 100, 60, 0.06); color: #00663d; border-color: rgba(0, 100, 60, 0.1); }
+        .interactive-box .btn:hover { background: rgba(0, 255, 136, 0.15); border-color: #00ff88; }
+        body.light .interactive-box .btn:hover { background: rgba(0, 100, 60, 0.1); }
+        .interactive-box .result { margin-top: 1rem; padding: 1rem; background: rgba(0, 0, 0, 0.3); border-radius: 8px; color: #b0c0b0; font-family: 'Roboto Mono', monospace; font-size: 0.9rem; min-height: 40px; }
+        body.light .interactive-box .result { background: rgba(0, 0, 0, 0.03); color: #334433; }
+
+        .threat-map { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+        .threat-item { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 255, 136, 0.06); border-radius: 8px; padding: 1rem; text-align: center; transition: 0.2s; cursor: pointer; }
+        body.light .threat-item { background: rgba(0, 0, 0, 0.02); border-color: rgba(0, 100, 60, 0.06); }
+        .threat-item:hover { border-color: rgba(0, 255, 136, 0.2); background: rgba(0, 255, 136, 0.04); }
+        body.light .threat-item:hover { border-color: rgba(0, 100, 60, 0.15); background: rgba(0, 100, 60, 0.03); }
+        .threat-item .icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+        .threat-item .name { font-size: 0.85rem; color: #e0e8e0; }
+        body.light .threat-item .name { color: #1a2a22; }
+        .threat-item .desc { font-size: 0.7rem; color: #667788; margin-top: 0.3rem; }
+        body.light .threat-item .desc { color: #778877; }
+        .threat-item .tools { margin-top: 0.5rem; font-size: 0.7rem; color: #00ff88; display: none; }
+        body.light .threat-item .tools { color: #00663d; }
+        .threat-item.active .tools { display: block; }
+        .threat-item.active { border-color: #00ff88; background: rgba(0, 255, 136, 0.06); }
+        body.light .threat-item.active { border-color: #00663d; background: rgba(0, 100, 60, 0.06); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes cardAppear { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (max-width: 700px) {
-            .logo { font-size: 2.8rem; }
-            .icon { font-size: 3.5rem; }
-            h1 { font-size: 1.8rem; }
-            .subtitle { font-size: 0.95rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .section-title { font-size: 1.4rem; padding-left: 0.8rem; }
+            .container { padding: 1.2rem; }
+            .side-menu { width: 280px; left: -300px; padding: 70px 18px 30px; }
+            .side-menu a { font-size: 0.8rem; padding: 9px 14px; }
+            .menu-btn { width: 46px; height: 46px; top: 16px; left: 16px; }
+            .menu-btn span { width: 20px; height: 2px; }
+            .vpn-comparison { font-size: 0.7rem; }
+            .vpn-comparison th, .vpn-comparison td { padding: 0.3rem 0.4rem; }
+            .tools-table { font-size: 0.7rem; }
+            .tools-table th, .tools-table td { padding: 0.3rem 0.5rem; }
+            .threat-map { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
         }
     </style>
 </head>
 <body>
+
+    <!-- ===== МЕНЮ ===== -->
+    <button class="menu-btn" id="menuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- ===== САЙД-МЕНЮ ===== -->
+    <nav class="side-menu" id="sideMenu">
+        <button class="close-menu" id="closeMenu">✕</button>
+        <div class="menu-title">◈ ANON ARCHIVE</div>
+        <a href="#vpn">VPN (сравнение)</a>
+        <a href="#tor">Tor Browser</a>
+        <a href="#browsers">Анонимные браузеры</a>
+        <a href="#tails">Tails OS</a>
+        <a href="#veracrypt">VeraCrypt + метаданные</a>
+        <a href="#opsec">ОПСЕК</a>
+        <a href="#hardware">Аппаратная анонимность</a>
+        <a href="#windows">Windows</a>
+        <a href="#android">Android</a>
+        <a href="#ios">iOS / iPhone</a>
+        <a href="#macos">macOS</a>
+        <a href="#wifi">Публичные WiFi</a>
+        <a href="#onion">Onion-ссылки</a>
+        <a href="#social">Социальная инженерия</a>
+        <a href="#rat">RAT</a>
+        <a href="#viruses">Вирусы</a>
+        <a href="#privacy">Приватность vs анонимность</a>
+        <a href="#passwords">Безопасные пароли</a>
+        <a href="#emergency">Экстренный план</a>
+        <a href="#mistakes">Ошибки новичков</a>
+        <a href="#tools">Инструменты</a>
+        <a href="#fully-anon">🔥 Полная анонимность</a>
+        <a href="#deanon">🔥 Деанонимизация</a>
+        <a href="#pgp">🔐 PGP / GPG</a>
+        <a href="#whonix">🧅 Whonix</a>
+        <a href="#qubes">🔒 Qubes OS</a>
+        <a href="#physical">👤 Физическая безопасность</a>
+        <a href="#leaks">📡 Проверка утечек</a>
+        <a href="#calculator">🧮 Калькулятор</a>
+        <a href="#legend">📝 Генератор легенды</a>
+        <a href="#terminal">💻 Терминал</a>
+        <a href="#threatmap">🗺️ Карта угроз</a>
+        <a href="#checklist">Чек-лист</a>
+    </nav>
+
+    <div class="overlay" id="overlay"></div>
+
     <div class="container">
-        <span class="icon">🔄</span>
-        <div class="logo">ANON ARCHIVE</div>
-        <h1>Идёт глобальное обновление</h1>
-        <div class="subtitle">
-            Мы перерабатываем дизайн, добавляем новые разделы<br>
-            и интерактивные инструменты.
+
+        <header class="hero">
+            <h1>◈ ANON ARCHIVE</h1>
+            <p>Глобальное обновление v2.0 — киберпанк-гайд по анонимности</p>
+            <span class="badge-v2">✦ v2.0 — КИБЕРПАНК ✦</span>
+        </header>
+
+        <div class="theme-toggle-wrap">
+            <button id="themeToggle">🌙 Тёмная тема</button>
         </div>
-        <div class="status-box">
-            <div class="label">🚀 v2.0 скоро здесь</div>
-            <p>Новая версия будет готова через несколько минут.<br>Спасибо за понимание.</p>
+
+        <div class="card">
+            <div class="badge">◈ ВСТУПЛЕНИЕ</div>
+            <p><strong>ANON ARCHIVE v2.0</strong> — глобальное обновление главного гайда по анонимности. Добавлены новые разделы, интерактивные инструменты, киберпанк-дизайн и улучшенная навигация. Всё для того, чтобы вы стали <strong>невидимыми</strong> в цифровом мире.</p>
         </div>
+
+        <div id="vpn" class="section-title"><span class="number">01</span> VPN: Mullvad vs IVPN vs ProtonVPN</div>
+        <div class="card">
+            <p>Три лучших no-log VPN для анонимности. Все три проверены, ни один не сливает данные.</p>
+            <table class="vpn-comparison">
+                <tr><th>Критерий</th><th><span class="best">Mullvad</span></th><th>IVPN</th><th>ProtonVPN</th></tr>
+                <tr><td style="text-align:left;"><strong>Цена</strong></td><td>5€ / мес</td><td>6€ / мес</td><td>4.99€ / мес</td></tr>
+                <tr><td style="text-align:left;"><strong>Анонимная оплата</strong></td><td class="best">✅ Наличные, XMR, BTC</td><td>✅ XMR, BTC</td><td>❌ Только карта</td></tr>
+                <tr><td style="text-align:left;"><strong>Регистрация</strong></td><td class="best">✅ Номер счёта</td><td>✅ Номер счёта</td><td>❌ Требует email</td></tr>
+                <tr><td style="text-align:left;"><strong>Аудиты</strong></td><td class="best">✅</td><td>✅</td><td>✅</td></tr>
+                <tr><td style="text-align:left;"><strong>Kill Switch</strong></td><td>✅</td><td>✅</td><td>✅</td></tr>
+                <tr><td style="text-align:left;"><strong>Tor over VPN</strong></td><td>✅</td><td>✅</td><td>❌</td></tr>
+                <tr><td style="text-align:left;"><strong>Вердикт</strong></td><td class="best">🏆 Лучший</td><td>Отличная альтернатива</td><td>Для повседневной</td></tr>
+            </table>
+            <div class="code-block">💡 Вывод: для <span class="green">максимальной анонимности</span> — Mullvad.</div>
+        </div>
+
+        <div id="tor" class="section-title"><span class="number">02</span> Tor Browser</div>
+        <div class="card">
+            <p>Скачивайте только с <strong>torproject.org</strong>. Уровень безопасности — «Безопасный». Используйте мосты (obfs4, Snowflake) при блокировках.</p>
+            <div class="warning-red">❌ Не разворачивайте на весь экран, не входите в личные аккаунты, не ставьте расширения.</div>
+        </div>
+
+        <div id="browsers" class="section-title"><span class="number">03</span> Анонимные браузеры</div>
+        <div class="two-columns">
+            <div class="card"><strong>LibreWolf</strong> (⭐⭐⭐⭐⭐) — максимальная приватность из коробки</div>
+            <div class="card"><strong>Brave</strong> (⭐⭐⭐⭐) — Shields + режим Tor</div>
+            <div class="card"><strong>Firefox Hardened</strong> — about:config + arkenfox</div>
+            <div class="card"><strong>Chrome / Edge</strong> — ❌ не использовать</div>
+        </div>
+
+        <div id="tails" class="section-title"><span class="number">04</span> Tails OS</div>
+        <div class="card">
+            <p>Загружается с флешки, не оставляет следов, весь трафик через Tor. Идеально: Tails + публичный WiFi.</p>
+            <div class="code-block">💡 Для высокорисковых операций — <span class="green">только Tails</span>.</div>
+        </div>
+
+        <div id="veracrypt" class="section-title"><span class="number">05</span> VeraCrypt + метаданные</div>
+        <div class="two-columns">
+            <div class="card"><strong>VeraCrypt</strong> — шифрование диска, скрытые тома</div>
+            <div class="card"><strong>MAT2 / ExifTool</strong> — удаление EXIF (GPS, модель камеры)</div>
+        </div>
+
+        <div id="opsec" class="section-title"><span class="number">06</span> ОПСЕК — поведение</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li>❌ Не использовать старые ники и клички</li>
+                <li>❌ Не смешивать анонимную и реальную личность</li>
+                <li>❌ Не рассказывать о своих инструментах анонимности</li>
+                <li>✅ Создайте легенду, используйте менеджер паролей</li>
+            </ul>
+        </div>
+
+        <div id="hardware" class="section-title"><span class="number">07</span> Аппаратная анонимность</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li>Смена MAC-адреса (macchanger, Tails делает это автоматически)</li>
+                <li>Покупка ноутбука и роутера за наличные</li>
+                <li>Отключение Bluetooth, TPM, Intel AMT в BIOS</li>
+            </ul>
+        </div>
+
+        <div id="windows" class="section-title"><span class="number">08</span> Windows</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li><strong>O&O ShutUp10++</strong> — отключает телеметрию</li>
+                <li><strong>WPD</strong> — блокирует IP-адреса Microsoft</li>
+                <li><strong>SimpleWall</strong> — файрвол</li>
+                <li>Локальная учётная запись (без Microsoft Account)</li>
+            </ul>
+            <div class="warning-red">После крупных обновлений Windows настройки слетают — применяйте заново.</div>
+        </div>
+
+        <div id="android" class="section-title"><span class="number">09</span> Android</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li>Лучший вариант: <strong>GrapheneOS</strong> (требует Pixel) или CalyxOS</li>
+                <li>Используйте microG вместо Google Play Services</li>
+                <li>Магазин приложений — F-Droid</li>
+                <li>Отключить геолокацию, Wi-Fi/Bluetooth-сканирование, диагностику</li>
+            </ul>
+        </div>
+
+        <div id="ios" class="section-title"><span class="number">10</span> iOS / iPhone</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li><strong>Onion Browser</strong> + Orbot (Tor на iPhone)</li>
+                <li>Отключить аналитику и персонализированную рекламу</li>
+                <li>Не использовать iCloud для важных данных</li>
+                <li>Полной анонимности на iOS нет из-за ограничений Apple</li>
+            </ul>
+        </div>
+
+        <div id="macos" class="section-title"><span class="number">11</span> macOS</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li><strong>Little Snitch</strong> — файрвол</li>
+                <li>Отключить аналитику, Siri, iCloud Drive, Find My Mac</li>
+                <li>Терминал: <code style="background:rgba(0,0,0,0.3); padding:2px 8px; border-radius:4px; font-size:0.8rem;">sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.analyticsd.plist</code></li>
+            </ul>
+        </div>
+
+        <div id="wifi" class="section-title"><span class="number">12</span> Публичные WiFi</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li>Включайте VPN <strong>ДО</strong> подключения к WiFi</li>
+                <li>Меняйте MAC-адрес перед подключением</li>
+                <li>Не используйте домашний WiFi для анонимных сессий</li>
+            </ul>
+        </div>
+
+        <div id="onion" class="section-title"><span class="number">13</span> Onion-ссылки</div>
+        <div class="card">
+            <p>Поиск: Ahmia, Torch, DuckDuckGo .onion. Официальные onion: Facebook, ProtonMail, NYT, BBC.</p>
+            <div class="warning-red">⚠️ Сравнивайте длинные адреса по буквам — фишеры меняют одну букву.</div>
+        </div>
+
+        <div id="social" class="section-title"><span class="number">14</span> Социальная инженерия</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li>❌ Никогда не диктовать код из СМС</li>
+                <li>❌ Не переходить по ссылкам из писем</li>
+                <li>❌ Не открывать .exe, .scr, .js, .vbs</li>
+                <li>✅ Звонок из банка — положить трубку и перезвонить самому</li>
+            </ul>
+            <div class="warning-red">🔴 Никакой антивирус не защитит от социальной инженерии — только ваша голова.</div>
+        </div>
+
+        <div id="rat" class="section-title"><span class="number">15</span> RAT — удалённый доступ</div>
+        <div class="card">
+            <p><strong>RAT</strong> — вирус, дающий хакеру полный контроль над ПК.</p>
+            <p><strong>Что делать:</strong></p>
+            <ol class="list-styled">
+                <li>1. Отключить интернет</li>
+                <li>2. Сохранить важные файлы на чистую флешку</li>
+                <li>3. <strong>Полная переустановка Windows</strong></li>
+                <li>4. Сменить ВСЕ пароли</li>
+                <li>5. Отозвать все активные сессии</li>
+            </ol>
+            <div class="warning-red">⚠️ Антивирус не гарантирует удаление RAT. Только чистая переустановка.</div>
+        </div>
+
+        <div id="viruses" class="section-title"><span class="number">16</span> Вирусы</div>
+        <div class="card"><div class="badge">⛏️ МАЙНЕРЫ</div><p>CPU на 100% в простое. Лечение: uBlock Origin, Malwarebytes.</p></div>
+        <div class="card"><div class="badge">🎭 ТРОЯНЫ</div><p>Неизвестные программы. Лечение: переустановка Windows.</p></div>
+        <div class="card"><div class="badge">🔒 ВИНЛОКЕРЫ</div><p>Файлы зашифрованы. ❌ НЕ ПЛАТИТЬ. Бекапы — спасение.</p></div>
+        <div class="card"><div class="badge">🕵️ СТИЛЕРЫ</div><p>Воровство паролей. Защита: менеджер паролей + 2FA.</p></div>
+
+        <div id="privacy" class="section-title"><span class="number">17</span> Приватность vs анонимность</div>
+        <div class="card">
+            <table class="tools-table">
+                <tr><th>Понятие</th><th>Что значит</th><th>Пример</th></tr>
+                <tr><td><strong>Приватность</strong></td><td>Данные скрыты, но личность не скрыта</td><td>DuckDuckGo, VPN</td></tr>
+                <tr><td><strong>Анонимность</strong></td><td>Личность нельзя установить</td><td>Tor, Tails, публичный WiFi + VPN</td></tr>
+            </table>
+            <div class="code-block">📌 Вывод: приватность — скрыть данные, анонимность — скрыть личность.</div>
+        </div>
+
+        <div id="passwords" class="section-title"><span class="number">18</span> Безопасные пароли</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li><strong>Длина:</strong> 16+ символов</li>
+                <li><strong>Пример:</strong> <code style="background:rgba(0,0,0,0.3); padding:2px 8px; border-radius:4px;">кошка-лампа-гвоздь-93!@</code></li>
+                <li><strong>Менеджеры:</strong> Bitwarden (облачный), KeePassXC (локальный)</li>
+                <li><strong>Не делать:</strong> хранить пароли в браузере, использовать один пароль везде</li>
+            </ul>
+            <div class="warning-red">⚠️ Включите 2FA через аутентификатор (Aegis, Google Authenticator).</div>
+        </div>
+
+        <div id="emergency" class="section-title"><span class="number">19</span> Экстренный план</div>
+        <div class="card">
+            <ol class="list-styled">
+                <li>❌ Не паниковать</li>
+                <li>❌ Не признаваться никому</li>
+                <li>✅ Уничтожить носитель (флешку, SIM)</li>
+                <li>✅ Сменить все пароли с другого устройства</li>
+                <li>✅ Отозвать все сессии</li>
+                <li>✅ Создать новую легенду</li>
+            </ol>
+        </div>
+
+        <div id="mistakes" class="section-title"><span class="number">20</span> Ошибки новичков</div>
+        <div class="card">
+            <ul class="list-styled">
+                <li>❌ Зашёл в Telegram/почту через Tor</li>
+                <li>❌ Не изменил MAC-адрес</li>
+                <li>❌ Включил Tor, выключил VPN на секунду</li>
+                <li>❌ Использует один никнейм везде</li>
+                <li>❌ Не отключил WebRTC</li>
+            </ul>
+            <div class="warning-red">🔴 90% новичков совершают эти ошибки.</div>
+        </div>
+
+        <div id="tools" class="section-title"><span class="number">21</span> Инструменты</div>
+        <div class="card">
+            <table class="tools-table">
+                <tr><th>Инструмент</th><th>Ссылка</th><th>Для чего</th></tr>
+                <tr><td>Mullvad VPN</td><td><a href="https://mullvad.net" target="_blank">mullvad.net</a></td><td>Анонимный VPN</td></tr>
+                <tr><td>Tor Browser</td><td><a href="https://torproject.org" target="_blank">torproject.org</a></td><td>Анонимный браузер</td></tr>
+                <tr><td>Tails OS</td><td><a href="https://tails.net" target="_blank">tails.net</a></td><td>Live-система</td></tr>
+                <tr><td>LibreWolf</td><td><a href="https://librewolf.net" target="_blank">librewolf.net</a></td><td>Приватный браузер</td></tr>
+                <tr><td>O&O ShutUp10</td><td><a href="https://oo-software.com" target="_blank">oo-software.com</a></td><td>Отключение телеметрии Windows</td></tr>
+                <tr><td>VeraCrypt</td><td><a href="https://veracrypt.fr" target="_blank">veracrypt.fr</a></td><td>Шифрование</td></tr>
+                <tr><td>Bitwarden</td><td><a href="https://bitwarden.com" target="_blank">bitwarden.com</a></td><td>Менеджер паролей</td></tr>
+                <tr><td>Aegis (2FA)</td><td><a href="https://getaegis.app" target="_blank">getaegis.app</a></td><td>Одноразовые коды</td></tr>
+            </table>
+        </div>
+
+        <div id="fully-anon" class="section-title gold"><span class="number">22</span> 🔥 Как стать полностью анонимным</div>
+        <div class="card gold-border">
+            <div class="badge gold">МАКСИМАЛЬНАЯ ЗАЩИТА</div>
+            <p><strong>Полная анонимность</strong> — это система, а не один инструмент.</p>
+        </div>
+        <div class="card gold-border">
+            <div class="badge gold">1. ЦИФРОВАЯ ЛИЧНОСТЬ</div>
+            <ul class="list-styled">
+                <li>Создайте легенду — имя, возраст, профессия, хобби</li>
+                <li>Не используйте старые никнеймы</li>
+                <li>Разные аккаунты для разных задач</li>
+            </ul>
+        </div>
+        <div class="card gold-border">
+            <div class="badge gold">2. СЕТЕВАЯ ИЗОЛЯЦИЯ</div>
+            <ul class="list-styled">
+                <li>VPN + Tor (Mullvad → Tor)</li>
+                <li>Публичный WiFi (кофейни, библиотеки)</li>
+                <li>Смена MAC-адреса</li>
+                <li>Tails для важных задач</li>
+            </ul>
+        </div>
+        <div class="card gold-border">
+            <div class="badge gold">3. ПОВЕДЕНИЕ</div>
+            <ul class="list-styled">
+                <li>Не рассказывайте о своей анонимности</li>
+                <li>Меняйте время выхода в сеть</li>
+                <li>Ноутбук за наличные</li>
+            </ul>
+            <div class="warning-gold">⚠️ Даже один разрыв в легенде может вас деанонимизировать.</div>
+        </div>
+        <div class="card gold-border">
+            <div class="badge gold">4. ТЕХНИЧЕСКИЕ СРЕДСТВА</div>
+            <ul class="list-styled">
+                <li>Mullvad (оплата наличными)</li>
+                <li>Tor Browser (без расширений)</li>
+                <li>Tails для важных задач</li>
+                <li>VeraCrypt, менеджер паролей, 2FA, бекапы</li>
+            </ul>
+            <div class="code-block">📌 Это минимальный набор для <span class="green">95% анонимности</span>.</div>
+        </div>
+        <div class="card gold-border">
+            <div class="badge gold">5. ФИЗИЧЕСКАЯ БЕЗОПАСНОСТЬ</div>
+            <ul class="list-styled">
+                <li>Избегайте камер при покупке техники</li>
+                <li>Платите наличными</li>
+                <li>Уничтожайте SIM-карты</li>
+                <li>Маскировка</li>
+            </ul>
+            <div class="warning-gold">⚠️ Анонимность в сети не имеет смысла, если вас могут найти в реальной жизни.</div>
+        </div>
+
+        <div id="deanon" class="section-title red"><span class="number">23</span> 🔴 Что делать при деанонимизации</div>
+        <div class="card red-border">
+            <div class="badge red">КРИТИЧЕСКАЯ СИТУАЦИЯ</div>
+            <p><strong>Не паниковать.</strong> Минимизируйте ущерб.</p>
+        </div>
+        <div class="card red-border"><div class="badge red">ШАГ 1</div><ul class="list-styled"><li>Отключить интернет</li><li>Не удалять файлы</li><li>Не признаваться</li></ul></div>
+        <div class="card red-border"><div class="badge red">ШАГ 2</div><ul class="list-styled"><li>Уничтожить носитель (флешка, SIM)</li><li>Зашифровать важные файлы</li><li>Телефон в Faraday-чехол</li></ul></div>
+        <div class="card red-border"><div class="badge red">ШАГ 3</div><ul class="list-styled"><li>Оценить ущерб</li><li>Кто вас нашёл?</li><li>Какие аккаунты скомпрометированы?</li></ul></div>
+        <div class="card red-border"><div class="badge red">ШАГ 4</div><ul class="list-styled"><li>Сменить все пароли</li><li>Отозвать все сессии</li><li>Включить 2FA</li></ul></div>
+        <div class="card red-border"><div class="badge red">ШАГ 5</div><ul class="list-styled"><li>Создать новую личность</li><li>Изменить привычки</li><li>Новая легенда</li></ul></div>
+        <div class="card red-border"><div class="badge red">ШАГ 6 — ЕСЛИ УГРОЗА КРИТИЧЕСКАЯ</div><ul class="list-styled"><li>Покинуть текущее место</li><li>Новые устройства, новая SIM</li><li>Полный перезапуск</li></ul></div>
+
+        <div id="pgp" class="section-title"><span class="number">24</span> 🔐 PGP / GPG — шифрование</div>
+        <div class="card blue-border">
+            <div class="badge blue">КРИПТОГРАФИЯ</div>
+            <p><strong>PGP (Pretty Good Privacy)</strong> — стандарт шифрования для сообщений и файлов.</p>
+            <ul class="list-styled">
+                <li><strong>Установка:</strong> Gpg4win (Win), GPG Suite (Mac), <code>sudo apt install gnupg</code> (Linux)</li>
+                <li><strong>Генерация ключа:</strong> <code>gpg --full-generate-key</code> (RSA 4096, срок 2 года)</li>
+                <li><strong>Экспорт публичного ключа:</strong> <code>gpg --export --armor [email] > public-key.asc</code></li>
+                <li><strong>Шифрование:</strong> <code>gpg --encrypt --armor --recipient [email] file.txt</code></li>
+                <li><strong>Расшифровка:</strong> <code>gpg --decrypt file.asc</code></li>
+            </ul>
+            <div class="warning-red">⚠️ Никогда не передавайте секретный ключ. Храните его в надёжном месте.</div>
+        </div>
+
+        <div id="whonix" class="section-title"><span class="number">25</span> 🧅 Whonix</div>
+        <div class="card blue-border">
+            <div class="badge blue">ВИРТУАЛЬНАЯ ЗАЩИТА</div>
+            <p><strong>Whonix</strong> — две виртуальные машины: Gateway (шлюз) и Workstation. Весь трафик через Tor.</p>
+            <ul class="list-styled">
+                <li><strong>Gateway</strong> — подключается к Tor</li>
+                <li><strong>Workstation</strong> — рабочая среда</li>
+                <li><strong>Изоляция:</strong> даже при взломе Workstation IP не узнают</li>
+            </ul>
+            <div class="code-block">📌 Whonix тяжелее Tails, но даёт <span class="green">лучшую изоляцию</span>.</div>
+        </div>
+
+        <div id="qubes" class="section-title"><span class="number">26</span> 🔒 Qubes OS</div>
+        <div class="card blue-border">
+            <div class="badge blue">МАКСИМАЛЬНАЯ ИЗОЛЯЦИЯ</div>
+            <p><strong>Qubes OS</strong> — операционная система, построенная на виртуализации. Каждое приложение работает в отдельной виртуальной машине.</p>
+            <ul class="list-styled">
+                <li><strong>Изоляция:</strong> каждый домен (приложение) изолирован</li>
+                <li><strong>Безопасность:</strong> взлом одного домена не влияет на другие</li>
+                <li><strong>Для кого:</strong> для параноиков, журналистов, диссидентов</li>
+            </ul>
+            <div class="warning-gold">💡 Qubes OS — один из самых безопасных способов работы в сети.</div>
+        </div>
+
+        <div id="physical" class="section-title"><span class="number">27</span> 👤 Физическая безопасность</div>
+        <div class="card red-border">
+            <div class="badge red">РЕАЛЬНАЯ ЖИЗНЬ</div>
+            <p>Анонимность в сети не имеет смысла, если вы раскрываете себя в реальной жизни.</p>
+            <ul class="list-styled">
+                <li><strong>Камеры:</strong> избегайте камер при покупке техники, SIM-карт</li>
+                <li><strong>Наличные:</strong> всегда платите наличными</li>
+                <li><strong>Уничтожение:</strong> уничтожайте SIM-карты, флешки, бумажные записи</li>
+                <li><strong>Маскировка:</strong> меняйте внешность (одежда, очки, походка)</li>
+                <li><strong>Перемещения:</strong> не используйте свой транспорт, меняйте маршруты</li>
+            </ul>
+            <div class="warning-red">🔴 Если вас могут найти в реальной жизни — анонимность в сети бесполезна.</div>
+        </div>
+
+        <div id="leaks" class="section-title"><span class="number">28</span> 📡 Проверка утечек</div>
+        <div class="card">
+            <div class="badge">ДИАГНОСТИКА</div>
+            <ul class="list-styled">
+                <li><strong>IP-адрес:</strong> <span class="green">ipleak.net</span></li>
+                <li><strong>DNS-утечки:</strong> <span class="green">dnsleaktest.com</span></li>
+                <li><strong>WebRTC:</strong> <span class="green">browserleaks.com/webrtc</span></li>
+                <li><strong>Тест Tor:</strong> <span class="green">check.torproject.org</span></li>
+                <li><strong>Фингерпринт:</strong> <span class="green">amiunique.org</span></li>
+            </ul>
+            <div class="warning-red">⚠️ Если видите свой реальный IP — настройки не работают.</div>
+        </div>
+
+        <div id="calculator" class="section-title"><span class="number">29</span> 🧮 Калькулятор анонимности</div>
+        <div class="card">
+            <div class="badge">ИНТЕРАКТИВ</div>
+            <p>Ответьте на 10 вопросов и узнайте ваш уровень анонимности.</p>
+            <div class="interactive-box">
+                <div id="calcQuestions">
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>1. Вы используете VPN?</strong><br><button class="btn calc-btn" data-q="1" data-v="1">Да</button><button class="btn calc-btn" data-q="1" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>2. Вы используете Tor?</strong><br><button class="btn calc-btn" data-q="2" data-v="1">Да</button><button class="btn calc-btn" data-q="2" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>3. Вы используете Tails?</strong><br><button class="btn calc-btn" data-q="3" data-v="1">Да</button><button class="btn calc-btn" data-q="3" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>4. Вы меняете MAC-адрес?</strong><br><button class="btn calc-btn" data-q="4" data-v="1">Да</button><button class="btn calc-btn" data-q="4" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>5. Вы используете менеджер паролей?</strong><br><button class="btn calc-btn" data-q="5" data-v="1">Да</button><button class="btn calc-btn" data-q="5" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>6. У вас включена 2FA?</strong><br><button class="btn calc-btn" data-q="6" data-v="1">Да</button><button class="btn calc-btn" data-q="6" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>7. Вы отключили телеметрию Windows?</strong><br><button class="btn calc-btn" data-q="7" data-v="1">Да</button><button class="btn calc-btn" data-q="7" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>8. Вы используете публичный WiFi?</strong><br><button class="btn calc-btn" data-q="8" data-v="1">Да</button><button class="btn calc-btn" data-q="8" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>9. Вы создали легенду?</strong><br><button class="btn calc-btn" data-q="9" data-v="1">Да</button><button class="btn calc-btn" data-q="9" data-v="0">Нет</button></div>
+                    <div class="calc-q" style="margin-bottom:0.5rem;"><strong>10. У вас есть экстренный план?</strong><br><button class="btn calc-btn" data-q="10" data-v="1">Да</button><button class="btn calc-btn" data-q="10" data-v="0">Нет</button></div>
+                </div>
+                <button class="btn" id="calcResultBtn">📊 Рассчитать</button>
+                <div class="result" id="calcResult">Нажмите "Рассчитать"</div>
+            </div>
+        </div>
+
+        <div id="legend" class="section-title"><span class="number">30</span> 📝 Генератор легенды</div>
+        <div class="card">
+            <div class="badge">ИНТЕРАКТИВ</div>
+            <p>Создайте анонимную личность за 1 клик.</p>
+            <div class="interactive-box">
+                <button class="btn" id="legendBtn">🎲 Сгенерировать легенду</button>
+                <div class="result" id="legendResult">Нажмите кнопку</div>
+            </div>
+        </div>
+
+        <div id="terminal" class="section-title"><span class="number">31</span> 💻 Терминал-симулятор</div>
+        <div class="card">
+            <div class="badge">ИНТЕРАКТИВ</div>
+            <p>Попробуйте себя в роли хакера. Вводите команды и нажимайте Enter.</p>
+            <div class="interactive-box">
+                <div style="background:rgba(0,0,0,0.5); padding:1rem; border-radius:8px; font-family:'Roboto Mono',monospace; font-size:0.8rem; min-height:120px; color:#a0c0b0;" id="terminalOutput">
+                    <span style="color:#00ff88;">$</span> Добро пожаловать в терминал!<br>
+                    <span style="color:#00ff88;">$</span> Доступные команды: help, whoami, ping, traceroute, clear, date, echo, exit
+                </div>
+                <div style="display:flex; margin-top:0.5rem;">
+                    <span style="color:#00ff88; margin-right:8px;">$</span>
+                    <input type="text" id="terminalInput" placeholder="Введите команду..." style="flex:1; background:rgba(0,0,0,0.3); border:1px solid rgba(0,255,136,0.1); border-radius:4px; padding:0.5rem; color:#e0e8e0; font-family:'Roboto Mono',monospace; outline:none;">
+                    <button class="btn" id="terminalBtn" style="margin-left:0.5rem;">Enter</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="threatmap" class="section-title"><span class="number">32</span> 🗺️ Карта угроз</div>
+        <div class="card">
+            <div class="badge">ВИЗУАЛИЗАЦИЯ</div>
+            <p>Нажмите на угрозу — узнайте, как защититься.</p>
+            <div class="threat-map">
+                <div class="threat-item" data-tools="VPN, Tor"><span class="icon">👁️</span><div class="name">Слежка провайдера</div><div class="desc">ISP видит ваши сайты</div><div class="tools">🛡️ VPN, Tor</div></div>
+                <div class="threat-item" data-tools="Tor, Tails"><span class="icon">🕵️</span><div class="name">Деанонимизация</div><div class="desc">Вашу личность раскрыли</div><div class="tools">🛡️ Tor, Tails, легенда</div></div>
+                <div class="threat-item" data-tools="Defender, Malwarebytes"><span class="icon">🦠</span><div class="name">Вирусы и RAT</div><div class="desc">Вредоносное ПО</div><div class="tools">🛡️ Антивирус, бекапы</div></div>
+                <div class="threat-item" data-tools="O&O ShutUp10, WPD"><span class="icon">📊</span><div class="name">Телеметрия Microsoft</div><div class="desc">Сбор данных Windows</div><div class="tools">🛡️ O&O ShutUp10, WPD</div></div>
+                <div class="threat-item" data-tools="ОПСЕК, легенда"><span class="icon">🧠</span><div class="name">Социальная инженерия</div><div class="desc">Обман и фишинг</div><div class="tools">🛡️ ОПСЕК, бдительность</div></div>
+                <div class="threat-item" data-tools="VeraCrypt, шифрование"><span class="icon">🔓</span><div class="name">Кража данных</div><div class="desc">Взлом аккаунтов</div><div class="tools">🛡️ VeraCrypt, 2FA</div></div>
+            </div>
+            <div class="code-block">💡 Нажмите на угрозу, чтобы увидеть <span class="green">инструменты защиты</span>.</div>
+        </div>
+
+        <div id="checklist" class="section-title gold"><span class="number">33</span> Финальный чек-лист</div>
+        <div class="checklist">
+            <ul class="list-styled">
+                <li>☐ Mullvad VPN (анонимная оплата)</li>
+                <li>☐ Tor Browser (уровень «Безопасный»)</li>
+                <li>☐ LibreWolf / Brave для повседневного</li>
+                <li>☐ Tails OS на флешке</li>
+                <li>☐ O&O ShutUp10 + WPD (Windows)</li>
+                <li>☐ GrapheneOS / microG (Android)</li>
+                <li>☐ Отключена аналитика на iPhone</li>
+                <li>☐ Little Snitch (macOS)</li>
+                <li>☐ Смена MAC перед публичным WiFi</li>
+                <li>☐ Менеджер паролей + 2FA</li>
+                <li>☐ Бекапы от винлокеров</li>
+                <li>☐ PGP / GPG для шифрования</li>
+                <li>☐ Whonix / Qubes для изоляции</li>
+                <li>☐ Легенда — проработанная</li>
+                <li>☐ Физическая безопасность</li>
+                <li>☐ Экстренный план</li>
+            </ul>
+            <div class="code-block">🔒 Выполнив 85% — ваша анонимность на уровне <span class="green">9/10</span>.</div>
+        </div>
+
+        <div class="card" style="text-align:center;">
+            <p style="font-style: italic; font-size: 1.1rem; color: #8899aa;">«Анонимность — это система. VPN + Tor + Tails + поведение + защита + PGP + Qubes.»</p>
+            <p style="margin-top: 0.6rem; color: #445566; font-size: 0.85rem;">— ANON ARCHIVE v2.0</p>
+        </div>
+
         <div class="footer">
-            <p>ANON ARCHIVE — гайд по анонимности</p>
+            <p>◈ ANON ARCHIVE v2.0 — глобальное обновление</p>
+            <p style="margin-top: 0.3rem; color: #445566;">33 раздела | Киберпанк-стиль</p>
+            <p class="developer">// сделано для сообщества</p>
         </div>
+
     </div>
+
+    <button class="to-top-btn" id="toTop">↑</button>
+
+    <script>
+        // ===== МЕНЮ =====
+        const menuBtn = document.getElementById('menuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const overlay = document.getElementById('overlay');
+        const closeMenuBtn = document.getElementById('closeMenu');
+
+        function openMenu() {
+            sideMenu.classList.add('open');
+            overlay.classList.add('active');
+            menuBtn.classList.add('active');
+        }
+
+        function closeMenu() {
+            sideMenu.classList.remove('open');
+            overlay.classList.remove('active');
+            menuBtn.classList.remove('active');
+        }
+
+        menuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
+        overlay.addEventListener('click', closeMenu);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+
+        document.querySelectorAll('.side-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+                closeMenu();
+            });
+        });
+
+        // ===== КНОПКА НАВЕРХ =====
+        const toTopBtn = document.getElementById('toTop');
+        window.addEventListener('scroll', function() {
+            toTopBtn.style.display = window.scrollY > 500 ? 'block' : 'none';
+        });
+        toTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ===== ТЕМА =====
+        const themeToggle = document.getElementById('themeToggle');
+        let darkMode = localStorage.getItem('anon-archive-theme') !== 'light';
+
+        function setTheme(isDark) {
+            darkMode = isDark;
+            document.body.classList.toggle('light', !isDark);
+            themeToggle.textContent = isDark ? '🌙 Тёмная тема' : '☀️ Светлая тема';
+            localStorage.setItem('anon-archive-theme', isDark ? 'dark' : 'light');
+        }
+
+        themeToggle.addEventListener('click', function() {
+            setTheme(!darkMode);
+        });
+
+        if (localStorage.getItem('anon-archive-theme') === 'light') {
+            setTheme(false);
+        }
+
+        // ===== АНИМАЦИЯ КАРТОЧЕК =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // ===== КАЛЬКУЛЯТОР =====
+        let scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        const questions = document.querySelectorAll('#calcQuestions .calc-q');
+        const calcResult = document.getElementById('calcResult');
+        const calcBtn = document.getElementById('calcResultBtn');
+
+        questions.forEach((q, index) => {
+            const btns = q.querySelectorAll('.calc-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const val = parseInt(this.dataset.v);
+                    scores[index] = val;
+                    btns.forEach(b => b.style.opacity = '0.5');
+                    this.style.opacity = '1';
+                });
+            });
+        });
+
+        calcBtn.addEventListener('click', function() {
+            const total = scores.reduce((a, b) => a + b, 0);
+            const percent = Math.round((total / 10) * 100);
+            let level;
+            if (percent >= 80) level = '🔥 Отлично! Вы почти невидимы.';
+            else if (percent >= 60) level = '🟢 Хороший уровень, но есть куда расти.';
+            else if (percent >= 40) level = '🟡 Средний уровень. Рекомендуем улучшить защиту.';
+            else level = '🔴 Низкий уровень. Срочно настройте анонимность!';
+            calcResult.innerHTML = `<strong>${percent}%</strong> — ${level}<br><span style="font-size:0.75rem;color:#667788;">Пройдено ${total} из 10 пунктов</span>`;
+        });
+
+        // ===== ГЕНЕРАТОР ЛЕГЕНДЫ =====
+        const legendBtn = document.getElementById('legendBtn');
+        const legendResult = document.getElementById('legendResult');
+
+        const firstNames = ['Алексей', 'Мария', 'Дмитрий', 'Анна', 'Сергей', 'Екатерина', 'Андрей', 'Ольга', 'Иван', 'Наталья', 'Максим', 'Юлия'];
+        const lastNames = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Попов', 'Соколов', 'Лебедев', 'Козлов', 'Новиков', 'Морозов'];
+        const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань', 'Киев', 'Минск', 'Алматы'];
+        const jobs = ['Программист', 'Журналист', 'Фрилансер', 'Студент', 'Дизайнер', 'Маркетолог', 'Инженер', 'Преподаватель'];
+        const hobbies = ['Чтение', 'Фотография', 'Путешествия', 'Спорт', 'Музыка', 'Йога', 'Рисование', 'Велосипед'];
+
+        legendBtn.addEventListener('click', function() {
+            const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const age = Math.floor(Math.random() * 30) + 20;
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            const job = jobs[Math.floor(Math.random() * jobs.length)];
+            const hobby = hobbies[Math.floor(Math.random() * hobbies.length)];
+            legendResult.innerHTML = `
+                <strong>${firstName} ${lastName}</strong><br>
+                🎂 ${age} лет · 🏙️ ${city} · 💼 ${job}<br>
+                ❤️ Хобби: ${hobby}<br>
+                📌 <span style="color:#00ff88;">Легенда создана. Используйте её для анонимных активностей.</span>
+            `;
+        });
+
+        // ===== ТЕРМИНАЛ =====
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalBtn = document.getElementById('terminalBtn');
+
+        function processCommand(cmd) {
+            const trimmed = cmd.trim();
+            if (!trimmed) return '';
+            if (trimmed === 'help') return 'Доступные команды: help, whoami, ping, traceroute, clear, date, echo [текст], exit';
+            if (trimmed === 'whoami') return 'anon_user (ваш IP скрыт через Tor)';
+            if (trimmed === 'ping') return 'PONG! (ваш запрос ушёл через 3 узла Tor)';
+            if (trimmed === 'traceroute') return 'Трассировка через Tor: 🧅 🧅 🧅 — ваша цель скрыта';
+            if (trimmed === 'clear') { terminalOutput.innerHTML = ''; return ''; }
+            if (trimmed === 'date') return new Date().toLocaleString();
+            if (trimmed === 'exit') return 'Выход... (нажмите F5 для перезапуска)';
+            if (trimmed.startsWith('echo ')) return trimmed.slice(5);
+            return `❌ Неизвестная команда: ${trimmed}. Введите 'help' для списка.`;
+        }
+
+        function sendCommand() {
+            const cmd = terminalInput.value;
+            if (!cmd) return;
+            const result = processCommand(cmd);
+            const time = new Date().toLocaleTimeString();
+            terminalOutput.innerHTML += `<br><span style="color:#00ff88;">[${time}] $</span> ${cmd}`;
+            if (result) {
+                terminalOutput.innerHTML += `<br><span style="color:#a0c0b0;">${result}</span>`;
+            }
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            terminalInput.value = '';
+        }
+
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') sendCommand();
+        });
+
+        terminalBtn.addEventListener('click', sendCommand);
+
+        // ===== КАРТА УГРОЗ =====
+        document.querySelectorAll('.threat-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+    </script>
+
 </body>
 </html>
